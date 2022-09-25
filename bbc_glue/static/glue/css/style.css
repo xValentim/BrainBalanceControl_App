@@ -1,0 +1,37 @@
+.btn-color{
+    background-color: #0e1c36;
+    color: #fff;
+    
+  }
+  
+.profile-image-pic{
+    height: 120px;
+    width: 120px;
+    object-fit: cover;
+}
+
+.card-conteiner{
+
+    flex-direction: row;
+
+}
+  
+.conteiner{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+
+}
+  
+.cardbody-color{
+    background-color: #ebf2fa;
+}
+
+a{
+    text-decoration: none;
+}

@@ -1,0 +1,42 @@
+{% extends "glue/base.html" %}
+{% load static %}
+
+{% block content %}
+
+<nav class="navbar navbar-dark bg-primary">
+    Btg
+</nav>
+<div class="container">
+    <div class="card-deck">
+    {% for bank in banks %}
+        <div class="card">
+            <img src="{% static 'glue/img/logo-btg.png' %}" class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">Banco {{bank.name}}</h5>
+                <ul class="list-group list-group-flush">
+                    <!-- <li class="list-group-item">Banco {{bank.organizationId}}</li> -->
+                    <li class="list-group-item">Saldo Atual: {{bank.balance}}</li>
+                    <li class="list-group-item">Próxima Fatura: {{bank.bill}}</li>
+                </ul>
+            </div>
+            <div class="card-body">
+                <a href="#" class="card-link">Detalhes</a>
+                <a href="#" class="card-link">Histórico</a>
+            </div>
+        </div>
+    {% endfor %}
+
+    </div>
+</div>
+
+<div class="conteiner">
+    <div class="card">
+        <h5 class="card-header">Aplicações de renda fixa</h5>
+        <div class="card-body">
+          <p class="card-text">Valor investido: BRL {{investment.investmentValue}}</p>
+        </div>
+      </div>
+</div>
+
+{% endblock %}
+

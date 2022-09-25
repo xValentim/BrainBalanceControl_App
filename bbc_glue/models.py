@@ -1,9 +1,7 @@
 from django.db import models
-
-
 import requests
 import time
-from .data_client import *
+from bbc_glue.data_client import *
 from datetime import datetime
 
 '''
@@ -23,9 +21,10 @@ class Account(models.Model):
         self.accountId = accountId
         self.balance = balance
         self.customerId = customerId
+        self.name = accountId[:4]
         self.organizationId = organizationId
         self.creditCards = creditCards
-        self.bill = bill
+        self.bill = round(bill, 2)
         self.log = 'Detalhes das contas do cliente ' + self.customerId + '\n' + '----------------------------------------\n'
 
     def showAllSituation(self) -> str:
@@ -68,7 +67,7 @@ class Account(models.Model):
         self.log += f"Investimento de {amount} na conta de investimentos 0001 em {datetime.now()} (Liquidez: {investment.getLiquidity()} || Risco: {investment.getRisk()})\n"
         print(f"Investimento de {amount} na conta de investimentos 0001 em {datetime.now()} (Liquidez: {investment.getLiquidity()} || Risco: {investment.getRisk()})\n")
 
-class Investment:
+class Investment(models.Model):
     def __init__(self, investmentValue, liquidity="high", risk="low") -> None:
         self.investmentValue = investmentValue
         self.liquidity = liquidity
@@ -96,7 +95,7 @@ class Investment:
     # def toApplication(self, amount: float) -> None:
     #     self.investmentValue += amount
 
-class PFM:
+class PFM(models.Model):
     def __init__(self, customerId: str, customer_data: dict, initialInvestment: float=0) -> None:
         self.customerId = customerId
         self.listAccountIds = customer_data['listAccountIds']
@@ -108,17 +107,17 @@ class PFM:
         self.log = ''
 
         self.myBill = self.getMyBill()
-        self.totalBalance = self.getTotalBalance()
-        self.accountNegative = self.getAccountNegative()
-        self.accountPositive = self.getAccountPositive()
-        self.allAmounts = self.getAllAmounts()
+        # self.totalBalance = self.getTotalBalance()
+        # self.accountNegative = self.getAccountNegative()
+        # self.accountPositive = self.getAccountPositive()
+        # self.allAmounts = self.getAllAmounts()
         self.salaries = self.getSalary()
         self.totalSalary = sum(self.salaries)
-        self.totalAmounts = sum(self.allAmounts)
+        # self.totalAmounts = sum(self.allAmounts)
         self.totalBill = sum(self.myBill)
         self.totalInvestment = self.investment.getInvestmentValue()
-        self.total = self.totalBalance + self.totalInvestment
-        self.allMyAccounts = [Account(account[2], -account[3], self.customerId, account[1], self.listCreditCardAccountId[index], self.myBill[index]) for index, account in enumerate(self.allAccounts)]
+        # self.total = self.totalBalance + self.totalInvestment
+        self.allMyAccounts = [Account(account[2], account[3], self.customerId, account[1], self.listCreditCardAccountId[index], self.myBill[index]) for index, account in enumerate(self.allAccounts)]
 
     def getAllDebt(self) -> list:
         valueAccount = sum([account.getBalance() for account in self.allMyAccounts])
@@ -256,7 +255,7 @@ class PFM:
         return  sum(self.getAllAmounts()) + sum(self.getSalary()) - sum(self.getMyBill())
         
 
-class CreditEngine:
+class CreditEngine(models.Model):
     def __init__(self, pfm: PFM) -> None:
         self.pfm = pfm
         self.i = 0.02
@@ -284,7 +283,7 @@ class CreditEngine:
     def offer(self) -> str:
         pass
 
-class InitPayment:
+class InitPayment(models.Model):
     def __init__(self, pfm: PFM) -> None:
         self.pfm = pfm
         self.log = ''
